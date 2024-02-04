@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: shays-app1
+  labels:
+    team: shays-app1
+spec:
+  selector:
+    matchLabels:
+      app: shays-app1
+  endpoints:
+  - port: web

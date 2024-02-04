@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shays-app1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shays-app1
+  template:
+    metadata:
+      labels:
+        app: shays-app1
+    spec:
+      containers:
+      - name: shays-app1
+        image: shays-app1:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8082
+    

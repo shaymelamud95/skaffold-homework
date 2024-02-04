@@ -1,0 +1,15 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+metadata:
+  name: shays-app1
+build:
+  artifacts:
+    - image: shays-app1
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/shays-app1.yaml
+profiles:
+- name: shays-app1
+
