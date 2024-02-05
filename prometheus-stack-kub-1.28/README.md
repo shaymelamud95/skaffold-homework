@@ -3,9 +3,9 @@
 Create a cluster with [kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
 
 ```
-cd prometheus stack kub-1.28
+cd prometheus-stack-kub-1.28
 
-kind create cluster --name monitoring --config prometheus stack kub-1.28/kind.yaml
+kind create cluster --name monitoring --config prometheus-stack-kub-1.28/kind.yaml
 ```
 
 Test our cluster to see all nodes are healthy and ready:
@@ -25,7 +25,7 @@ monitoring-worker3         Ready    <none>                 38s   v1.23.1
 Let's create the CRD's and prometheus operator
 
 ```
-kubectl create -f ./prometheus stack kub-1.28/manifests/setup/
+kubectl create -f ./prometheus-stack-kub-1.28/manifests/setup/
 ```
 
 # Setup Manifests
@@ -33,7 +33,7 @@ kubectl create -f ./prometheus stack kub-1.28/manifests/setup/
 Apply rest of manifests
 
 ```
-kubectl create -f ./prometheus stack kub-1.28/manifests/
+kubectl create -f ./prometheus-stack-kub-1.28/manifests/
 ```
 
 # Check Monitoring

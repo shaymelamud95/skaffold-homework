@@ -43,8 +43,6 @@ spec:
     runAsNonRoot: true
     runAsUser: 1000
   serviceAccountName: prometheus-k8s
-  serviceMonitorNamespaceSelector:
-    matchLabels:
-      kubernetes.io/metadata.name: default
+  serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector: {}
   version: 2.46.0

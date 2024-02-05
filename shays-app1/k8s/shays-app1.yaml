@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: shays-app1
+  labels:
+    app: shays-app1
 spec:
   replicas: 1
   selector:
@@ -14,8 +16,6 @@ spec:
     spec:
       containers:
       - name: shays-app1
-        image: shays-app1:latest
-        imagePullPolicy: Always
+        image: shays-app1
         ports:
-        - containerPort: 8082
-    
+        - containerPort: 8082    

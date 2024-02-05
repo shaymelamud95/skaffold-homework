@@ -87,7 +87,8 @@ metadata:
 spec:
   endpoints:
   - interval: 30s
-    port: web
+    port: {ports}
+    path: /metrics
   selector:
     matchLabels:
       app: {app_name}
@@ -173,8 +174,10 @@ build:
 manifests:
   rawYaml:
     - k8s/{app_name}.yaml
-profiles:
-- name: {app_name}
+    - k8s/service.yaml
+    - k8s/servicemonitor.yaml
+#profiles:
+#- name: {app_name}
     '''
     with open("skaffold.yaml", 'w') as skaffold_config:
         skaffold_config.write(skaffold_content)
@@ -182,7 +185,7 @@ profiles:
 
 if __name__ == "__main__":
     # Run the installations -- I installed with Chocolatey
-    # subprocess.run(['python', "installations.py"], check=True)
+    subprocess.run(['python', "installations.py"], check=True)
 
     # app_name, code_language, ports, base_image_url, metrics_to_collect = get_user_input()
     app_name, code_language, ports, base_image_url, metrics_to_collect = ["shays-app2", "py","8083", "python:3.8-alpine", "http_requests_total,http_request_duration_seconds,cpu_usage,mem_usage"]
@@ -190,9 +193,6 @@ if __name__ == "__main__":
 
     # kubectl apply -n monitoring -f ./kubernetes/servicemonitors/prometheus.yaml
     subprocess.run(["kubectl", "apply", "-n", "monitoring", "-f", "prometheus.yml"])
-
-    # # kubectl -n monitoring port-forward prometheus-applications-0 9090
-    # subprocess.run(["kubectl", "-n", "monitoring", "port-forward", "prometheus-applications-0", "9090"])
 
     # kubectl apply app service
     subprocess.run(["kubectl", "-n", "default", "apply", "-f", "./k8s/service.yaml"])

@@ -10,6 +10,5 @@ build:
 manifests:
   rawYaml:
     - k8s/shays-app1.yaml
-profiles:
-- name: shays-app1
-
+    - k8s/service.yaml
+    - k8s/servicemonitor.yaml

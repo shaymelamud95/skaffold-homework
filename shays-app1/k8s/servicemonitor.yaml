@@ -9,4 +9,5 @@ spec:
     matchLabels:
       app: shays-app1
   endpoints:
-  - port: web
+  - port: 8082
+    path: /metrics
