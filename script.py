@@ -12,6 +12,37 @@ def get_user_input():
     return app_name, code_language, ports, base_image_url, metrics_to_collect
 
 def generate_files(app_name, code_language, ports, base_image_url, metrics_to_collect):
+    
+    
+    # Dictionary for CMD and build commands
+    language_commands = {
+        "py": {
+            "cmd": ["python", "./main.py"],
+            "build": ["python", "-m", "pip", "install", "-r", "requirements.txt"]
+        },
+        "js": {
+            "cmd": ["node", "."],
+            "build": ["npm", "install"]
+        },
+        "dotnet": {
+            "cmd": ["dotnet", "run"],
+            "build": ["dotnet", "build"]
+        },
+        "go": {
+            "cmd": ["./{app_name}"],
+            "build": ["go", "build", "-o", "{app_name}"]
+        },
+        # Add more languages as needed
+    }
+
+    # Switch case to get CMD and build commands
+    if code_language in language_commands:
+        cmd_command = language_commands[code_language]["cmd"]
+        build_command = language_commands[code_language]["build"]
+    else:
+        print(f"Unsupported programming language: {code_language}")
+        sys.exit(1)
+
     # Check if the directory already exists
     if os.path.exists(app_name):
         # Delete the existing directory
@@ -32,16 +63,15 @@ FROM {base_image_url}
 EXPOSE {ports}
 
 RUN mkdir /{app_name}/
-# WORKDIR /{app_name}/
+WORKDIR /{app_name}/
 
 # Copy everything under ./{app_name} to /{app_name}/
 COPY ./{app_name} /{app_name}/
 
-# Set the working directory to /{app_name}/
-WORKDIR /{app_name}/
+# RUN {build_command}
 
 # Generic CMD based on code language
-CMD ["{code_language}", "./main.{code_language}"]
+CMD {cmd_command}
 '''
     with open("Dockerfile", 'w') as dockerfile:
         dockerfile.write(dockerfile_content)
@@ -161,11 +191,11 @@ if __name__ == "__main__":
     # kubectl apply -n monitoring -f ./kubernetes/servicemonitors/prometheus.yaml
     subprocess.run(["kubectl", "apply", "-n", "monitoring", "-f", "prometheus.yml"])
 
-    # kubectl -n monitoring port-forward prometheus-applications-0 9090
-    subprocess.run(["kubectl", "-n", "monitoring", "port-forward", "prometheus-applications-0", "9090"])
+    # # kubectl -n monitoring port-forward prometheus-applications-0 9090
+    # subprocess.run(["kubectl", "-n", "monitoring", "port-forward", "prometheus-applications-0", "9090"])
 
     # kubectl apply app service
-    subprocess.run(["kubectl", "-n", "default", "apply", "-f", "./k8s/service-{app_name}.yaml"])
+    subprocess.run(["kubectl", "-n", "default", "apply", "-f", "./k8s/service.yaml"])
 
     # kubectl apply servicemonitor
     subprocess.run(["kubectl", "-n", "default", "apply", "-f", "./k8s/servicemonitor.yaml"])

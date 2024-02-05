@@ -1,23 +1,8 @@
-apiVersion: monitoring.coreos.com/v1
-kind: Prometheus
-metadata:
-  name: prometheus-config
-spec:
-  serviceMonitorSelector:
-    matchLabels:
-      release: prometheus
-  resources:
-    requests:
-      memory: 400Mi
-  alerting:
-    alertmanagers:
-    - namespace: default
-      name: alertmanager-main
-      port: web
-  ruleSelector:
-    matchLabels:
-      role: prometheus-rules
-  securityContext:
-    fsGroup: 2000
-  serviceAccountName: prometheus
-  version: v2.26.0
+global:
+  scrape_interval: 15s
+ 
+scrape_configs:
+  - job_name: 'shays-app1'
+    static_configs:
+      - targets: ['localhost:8082']
+    metrics_path: /metrics
